@@ -75,11 +75,16 @@ function(vcpkg_download_distfile VAR)
 
     # Works around issue #3399
     if(IS_DIRECTORY "${DOWNLOADS}/temp")
+        # Remove 'temp0' directory created by previous versions of vcpkg
         file(REMOVE_RECURSE "${DOWNLOADS}/temp0")
-        file(RENAME "${DOWNLOADS}/temp" "${DOWNLOADS}/temp0")
-        file(REMOVE_RECURSE "${DOWNLOADS}/temp0")
+
+        file(GLOB temp_files "${DOWNLOADS}/temp/*")
+        file(REMOVE_RECURSE "${temp_files}")
+        message(STATUS "KEKEKEKE" ${temp_files})
     endif()
-    file(MAKE_DIRECTORY "${DOWNLOADS}/temp")
+    if(NOT IS_DIRECTORY "${DOWNLOADS}/temp")
+        file(MAKE_DIRECTORY "${DOWNLOADS}/temp")
+    endif()
 
     function(test_hash FILE_PATH FILE_KIND CUSTOM_ERROR_ADVICE)
         if(_VCPKG_INTERNAL_NO_HASH_CHECK)
