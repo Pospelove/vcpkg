@@ -1,0 +1,6 @@
+Source: openmw
+Version: 2020-06-18
+Homepage: http://openmw.org/
+Description: OpenMW is an open-source open-world RPG game engine that supports playing Morrowind.
+Build-Depends: osg[plugins], sdl2, mygui, bullet3, openal-soft, ffmpeg
+Supports: !uwp
