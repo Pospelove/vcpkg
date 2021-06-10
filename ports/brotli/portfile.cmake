@@ -11,6 +11,8 @@ vcpkg_from_github(
         fix-ios.patch
 )
 
+file(APPEND ${SOURCE_PATH}/CMakeLists.txt "message(STATUS BROTLI_EMSCRIPTEN_is_${BROTLI_EMSCRIPTEN})")
+
 vcpkg_configure_cmake(
     SOURCE_PATH ${SOURCE_PATH}
     PREFER_NINJA
