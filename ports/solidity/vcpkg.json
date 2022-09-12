@@ -1,0 +1,28 @@
+{
+  "name": "solidity",
+  "version-string": "",
+  "description": "Solidity, the Smart Contract Programming Language",
+  "homepage": "https://soliditylang.org/",
+  "license": "GPL-3.0",
+  "dependencies": [
+    "boost-filesystem",
+    "boost-test",
+    "boost-program-options",
+    "boost-system",
+    "boost-multiprecision",
+    "boost-rational",
+    "boost-variant",
+    "boost-bimap",
+    "fmt",
+    "jsoncpp",
+    "range-v3",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}
