@@ -57,11 +57,20 @@ if(NOT VCPKG_LIBRARY_LINKAGE STREQUAL "static")
                     -DONLY_SHARED_LIBS=ON)
 endif()
 
+if (VCPKG_CROSSCOMPILING)
+    # when cross-compiling, try_run will not work
+    set(extra_opts 
+        -DTEST_LFS_WORKS_RUN=TRUE
+        -DTEST_LFS_WORKS_RUN__TRYRUN_OUTPUT=""
+    )
+endif()
+
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     DISABLE_PARALLEL_CONFIGURE
     OPTIONS
         ${FEATURE_OPTIONS}
+        ${extra_opts}
         -DBUILD_TESTING=OFF
         -DHDF5_BUILD_EXAMPLES=OFF
         -DHDF5_INSTALL_DATA_DIR=share/hdf5/data
