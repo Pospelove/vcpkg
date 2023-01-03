@@ -58,6 +58,19 @@ if(NOT VCPKG_LIBRARY_LINKAGE STREQUAL "static")
 endif()
 
 if (VCPKG_CROSSCOMPILING)
+    # replace "C_RUN ("maximum decimal precision for C" ${PROG_SRC} PROG_RES PROG_OUTPUT4)"
+    # with "set(PROG_OUTPUT4 1 1)"
+    # in file config/cmake/ConfigureChecks.cmake
+    file(READ "${SOURCE_PATH}/config/cmake/ConfigureChecks.cmake" _contents)
+    string(REPLACE "C_RUN (\"maximum decimal precision for C\"" "set(PROG_OUTPUT4 1 1)" _contents "${_contents}")
+    file(WRITE "${SOURCE_PATH}/config/cmake/ConfigureChecks.cmake" "${_contents}")
+
+    # delete file ConfigureChecks
+    file(REMOVE "${SOURCE_PATH}/config/cmake/ConfigureChecks.cmake")
+
+    # touch file ConfigureChecks
+    file(WRITE "${SOURCE_PATH}/config/cmake/ConfigureChecks.cmake" "")
+
     # when cross-compiling, try_run will not work
     set(extra_opts 
         -DH5_PRINTF_LL_TEST_RUN=TRUE
