@@ -57,11 +57,47 @@ if(NOT VCPKG_LIBRARY_LINKAGE STREQUAL "static")
                     -DONLY_SHARED_LIBS=ON)
 endif()
 
+if (VCPKG_CROSSCOMPILING)
+    # replace "C_RUN ("maximum decimal precision for C" ${PROG_SRC} PROG_RES PROG_OUTPUT4)"
+    # with "set(PROG_OUTPUT4 1 1)"
+    # in file config/cmake/ConfigureChecks.cmake
+    file(READ "${SOURCE_PATH}/config/cmake/ConfigureChecks.cmake" _contents)
+    string(REPLACE "C_RUN (\"maximum decimal precision for C\"" "set(PROG_OUTPUT4 1 1)" _contents "${_contents}")
+    file(WRITE "${SOURCE_PATH}/config/cmake/ConfigureChecks.cmake" "${_contents}")
+
+    # delete file ConfigureChecks
+    file(REMOVE "${SOURCE_PATH}/config/cmake/ConfigureChecks.cmake")
+
+    # touch file ConfigureChecks
+    file(WRITE "${SOURCE_PATH}/config/cmake/ConfigureChecks.cmake" "")
+
+    # when cross-compiling, try_run will not work
+    set(extra_opts 
+        -DH5_PRINTF_LL_TEST_RUN=TRUE
+        -DH5_PRINTF_LL_TEST_RUN__TRYRUN_OUTPUT=""
+        -DH5_LDOUBLE_TO_LONG_SPECIAL_RUN=TRUE
+        -DH5_LDOUBLE_TO_LONG_SPECIAL_RUN__TRYRUN_OUTPUT=""
+        -DH5_LONG_TO_LDOUBLE_SPECIAL_RUN=TRUE
+        -DH5_LONG_TO_LDOUBLE_SPECIAL_RUN__TRYRUN_OUTPUT=""
+        -DH5_LDOUBLE_TO_LLONG_ACCURATE_RUN=TRUE
+        -DH5_LDOUBLE_TO_LLONG_ACCURATE_RUN__TRYRUN_OUTPUT=""
+        -DH5_LLONG_TO_LDOUBLE_CORRECT_RUN=TRUE
+        -DH5_LLONG_TO_LDOUBLE_CORRECT_RUN__TRYRUN_OUTPUT=""
+        -DH5_DISABLE_SOME_LDOUBLE_CONV_RUN=TRUE
+        -DH5_DISABLE_SOME_LDOUBLE_CONV_RUN__TRYRUN_OUTPUT=""
+        -DH5_NO_ALIGNMENT_RESTRICTIONS_RUN=TRUE
+        -DH5_NO_ALIGNMENT_RESTRICTIONS_RUN__TRYRUN_OUTPUT=""
+        -DRUN_RESULT_VAR=TRUE
+        -DRUN_RESULT_VAR__TRYRUN_OUTPUT=""
+    )
+endif()
+
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     DISABLE_PARALLEL_CONFIGURE
     OPTIONS
         ${FEATURE_OPTIONS}
+        ${extra_opts}
         -DBUILD_TESTING=OFF
         -DHDF5_BUILD_EXAMPLES=OFF
         -DHDF5_INSTALL_DATA_DIR=share/hdf5/data
