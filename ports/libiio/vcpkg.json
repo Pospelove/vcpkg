@@ -1,0 +1,80 @@
+{
+    "name": "libiio",
+    "version-date": "2023-05-03",
+    "description": "A cross platform library for interfacing with local and remote Linux IIO devices",
+    "homepage": "https://github.com/analogdevicesinc/libiio",
+    "license": "LGPL-2.1-or-later",
+    "dependencies": [
+        {
+            "name": "vcpkg-cmake",
+            "host": true
+        },
+        {
+            "name": "vcpkg-cmake-config",
+            "host": true
+        }
+    ],
+    "default-features": [
+        "usb-backend"
+    ],
+    "features": {
+        "network-backend": {
+            "description": "Enable the network backend",
+            "dependencies": [
+                "ahavi",
+                {
+                    "name": "libiio",
+                    "features": [
+                        "xml-backend"
+                    ]
+                }
+            ]
+        },
+        "usb-backend": {
+            "description": "Enable the libusb backend",
+            "dependencies": [
+                {
+                    "name": "libusb"
+                },
+                {
+                    "name": "libiio",
+                    "features": [
+                        "xml-backend"
+                    ]
+                }
+            ]
+        },
+        "local-backend": {
+            "description": "Build the local backend",
+            "supports": "linux",
+            "dependencies": []
+        },
+        "serial-backend": {
+            "description": "Build the serial backend",
+            "dependencies": [
+                "libserialport",
+                {
+                    "name": "libiio",
+                    "features": [
+                        "xml-backend"
+                    ]
+                }
+            ]
+        },
+        "xml-backend": {
+            "description": "Build the XML backend",
+            "dependencies": [
+                "libxml2"
+            ]
+        },
+        "zstd": {
+            "description": "Build with zstd compression support",
+            "dependencies": [
+                "zstd"
+            ]
+        },
+        "ipv6": {
+            "description": "Build with IPv6 support"
+        }
+    }
+}
